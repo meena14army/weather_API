@@ -1,0 +1,82 @@
+const apiKey = '5177440c1950f7b45d31876061271c9e';
+
+// Event listener for button click
+document.getElementById('getWeatherBtn').addEventListener('click', () => {
+    const city = document.getElementById('cityInput').value;
+    if (city) {
+        getWeather(city);
+        getCityCoordinates(city);
+    } else {
+        document.getElementById('weatherResult').innerHTML = `<p>Please enter a city.</p>`;
+    }
+});
+
+// Function to fetch weather data from OpenWeatherMap API
+async function getWeather(city) {
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.cod === 200) {
+            displayWeather(data);
+        } else {
+            document.getElementById('weatherResult').innerHTML = `<p>City not found.</p>`;
+        }
+    } catch (error) {
+        console.error("Error fetching weather data:", error);
+    }
+}
+
+// Function to display the weather information
+function displayWeather(data) {
+    const city = data.name;
+    const temp = data.main.temp;
+    const weather = data.weather[0].description;
+    const humidity = data.main.humidity;
+
+    document.getElementById('weatherResult').innerHTML = `
+        <p><strong>${city}</strong></p>
+        <p>Temperature: ${temp}°C</p>
+        <p>Weather: ${weather}</p>
+        <p>Humidity: ${humidity}%</p>
+    `;
+}
+
+// Function to get coordinates of the city using OpenWeatherMap API
+async function getCityCoordinates(city) {
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.cod === 200) {
+            const coordinates = {
+                lat: data.coord.lat,
+                lng: data.coord.lon
+            };
+            initMap(coordinates); // Initialize map with the city coordinates
+        } else {
+            console.error("City not found.");
+        }
+    } catch (error) {
+        console.error("Error fetching city coordinates:", error);
+    }
+}
+
+// Initialize and add the map
+function initMap(cityLocation) {
+    // Create a map object centered on the city coordinates
+    const map = new google.maps.Map(document.getElementById('map'), {
+        center: cityLocation,
+        zoom: 12
+    });
+
+    // Create a traffic layer
+    const trafficLayer = new google.maps.TrafficLayer();
+    
+    // Display traffic on the map
+    trafficLayer.setMap(map);
+}
