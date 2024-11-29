@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather and Traffic App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="weather-traffic-app">
+        <h1>Weather and Traffic in Your City</h1>
+        
+        <!-- City Input Section -->
+        <input type="text" id="cityInput" placeholder="Enter your city" required>
+        <button id="getWeatherBtn">Get Weather and Traffic</button>
+        
+        <!-- Weather Result Section -->
+        <div id="weatherResult" class="result">
+            <!-- Weather information will display here -->
+        </div>
+        
+        <!-- Traffic Map Section -->
+        <div id="map" class="map-container">
+            <!-- Traffic map will display here -->
+        </div>
+    </div>
+
+    <!-- Google Maps API -->
+    <script async defer 
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJd6-KkHVtgrnmzkMNnfkoxxdtNBW0PB8&callback=initMap">
+    </script>
+
+    
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+
+</body>
+</html>
